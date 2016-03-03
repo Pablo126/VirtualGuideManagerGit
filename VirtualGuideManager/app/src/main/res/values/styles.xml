@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+
+    <style name="ButtonA">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">@dimen/abc_text_size_large_material</item>
+    </style>
+</resources>

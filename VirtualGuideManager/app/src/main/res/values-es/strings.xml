@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">VirtualGuideManager</string>
+
+    <string name="title_section1">Perfil</string>
+    <string name="title_section2">Idioma</string>
+    <string name="title_section3">Salir</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Configuración</string>
+    <string name="username">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Iniciar sesión</string>
+</resources>
