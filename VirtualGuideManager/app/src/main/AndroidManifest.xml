@@ -27,7 +27,10 @@
             android:label="@string/title_activity_main_adm" />
         <activity
             android:name=".Visitors.Main"
-            android:label="@string/title_activity_main_vis"></activity>
+            android:label="@string/title_activity_main_vis" />
+        <activity
+            android:name=".Administrator.New_project"
+            android:label="@string/title_activity_new_project"></activity>
     </application>
 
 </manifest>

@@ -30,4 +30,16 @@
     </string>
     <string name="title_activity_main_adm">My projects</string>
     <string name="title_activity_main_vis">Guides</string>
+    <string name="title_activity_new_project">New project</string>
+
+    <string name="projectname">Project name:</string>
+    <string name="description">Description:</string>
+    <string name="type">Project type:</string>
+    <string name="background">Background:</string>
+    <string name="save">Save</string>
+
+    <string name="proj_del_up">Choose a option:</string>
+    <string name="proj_del">Delete</string>
+    <string name="proj_up">Update</string>
+
 </resources>

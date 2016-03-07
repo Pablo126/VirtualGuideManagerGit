@@ -1,7 +1,9 @@
 package com.apps.jpablo.virtualguidemanager;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
@@ -17,6 +19,9 @@ public class DBContract {
         public static final String USER_TABLE_NAME = "Users";
         public static final String PROJECTS_TABLE_NAME = "Projects";
         public static final String USER_PROJ_TABLE_NAME = "User_proj";
+        public static final String INFO_POINT_TABLENAME = "Infopoints";
+        public static final String IP_PROJ_TABLE_NAME = "Ip_proj";
+        public static final String FILE_TYPE_TABLE_NAME = "File_type";
         public static final String STRING_TYPE = "text";
         public static final String INT_TYPE = "integer";
 
@@ -32,6 +37,7 @@ public class DBContract {
         public static class ColumnProjects{
             public static final String ID = BaseColumns._ID;
             public static final String NAME = "name";
+            public static final String DESCRIPTION = "description";
             public static final String ID_TYPE = "id_type";
             public static final String BACKGROUND = "img_background";
         }
@@ -41,6 +47,28 @@ public class DBContract {
             public static final String ID_USER = "id_user";
             public static final String ID_PROJECT = "id_project";
         }
+
+        //Campos de la tabla Infopoint
+        public static class ColumnInfopoint{
+            public static final String ID = BaseColumns._ID;
+            public static final String NAME = "name";
+            public static final String ID_TYPE = "id_type";
+            public static final String FILE = "file";
+            public static final String QR = "qr";
+        }
+
+        //Campos de la tabla Ip_proj
+        public static class ColumnIn_proj{
+            public static final String ID_INFOPOINT = "id_ip";
+            public static final String ID_PROJECT = "id_project";
+        }
+
+        //Campos de la tabla File_type
+        public static class columnFile_type{
+            public static final String ID = BaseColumns._ID;
+            public static final String DESCRIPTION = "description";
+        }
+
         //Script de Creación de la tabla Users
         public static final String CREATE_USERS_SCRIPT =
                 "create table "+USER_TABLE_NAME+"(" +
@@ -54,6 +82,7 @@ public class DBContract {
                 "create table "+PROJECTS_TABLE_NAME+"(" +
                         ColumnProjects.ID+" "+INT_TYPE+" primary key autoincrement," +
                         ColumnProjects.NAME+" "+STRING_TYPE+" not null," +
+                        ColumnProjects.DESCRIPTION+" "+STRING_TYPE+" not null," +
                         ColumnProjects.ID_TYPE+" "+INT_TYPE+" not null," +
                         ColumnProjects.BACKGROUND+" "+STRING_TYPE+")";
 
@@ -64,6 +93,29 @@ public class DBContract {
                         ColumnUser_proj.ID_PROJECT+" "+INT_TYPE+" not null," +
                         "PRIMARY KEY ("+ColumnUser_proj.ID_USER+", "+ColumnUser_proj.ID_PROJECT+"))";
 
+        //Script de Creación de la tabla INFOPOINTS
+        public static final String CREATE_INFOPOINTS_SCRIPT =
+                "create table "+INFO_POINT_TABLENAME+"(" +
+                        ColumnInfopoint.ID+" "+INT_TYPE+" primary key autoincrement," +
+                        ColumnInfopoint.NAME+" "+STRING_TYPE+" not null," +
+                        ColumnInfopoint.ID_TYPE+" "+INT_TYPE+"," +
+                        ColumnInfopoint.FILE+" "+STRING_TYPE+"," +
+                        ColumnInfopoint.QR+" "+STRING_TYPE+")";
+
+        //Script de Creación de la tabla IP_PROJ
+        public static final String CREATE_IP_PROJ_SCRIPT =
+                "create table "+IP_PROJ_TABLE_NAME+"(" +
+                        ColumnIn_proj.ID_INFOPOINT+" "+INT_TYPE+" not null ," +
+                        ColumnIn_proj.ID_PROJECT+" "+INT_TYPE+" not null," +
+                        "PRIMARY KEY ("+ColumnIn_proj.ID_INFOPOINT+", "+ColumnIn_proj.ID_PROJECT+"))";
+
+        //Script de Creación de la tabla File_type
+        public static final String CREATE_FILE_TYPE_SCRIPT =
+                "create table "+FILE_TYPE_TABLE_NAME+"(" +
+                        columnFile_type.ID+" "+INT_TYPE+" primary key autoincrement," +
+                        columnFile_type.DESCRIPTION+" "+STRING_TYPE+")";
+
+
         //Scripts de inserción por defecto
         public static final String INSERT_USERS_SCRIPT =
                 "insert into "+USER_TABLE_NAME+" values(" +
@@ -73,15 +125,28 @@ public class DBContract {
         //Scripts de inserción por defecto
         public static final String INSERT_PROJECTS_SCRIPT =
                 "insert into "+PROJECTS_TABLE_NAME+" values(" +
-                        "null," + "\"Proj1\"," + "\"0\"," + "\"\")," +
-                        "(null," + "\"Proj2\"," + "\"0\"," + "\"\")";
+                        "null," + "\"Proj1\"," + "\"Descripción proyecto 1\"," + "\"0\"," + "\"\")," +
+                        "(null," + "\"Proj2\"," + "\"Esta es la descripcion del proyecto 2\"," + "\"0\"," + "\"\")";
 
         //Scripts de inserción por defecto
         public static final String INSERT_USER_PROJ_SCRIPT =
                 "insert into "+USER_PROJ_TABLE_NAME+" values(" +
-                        "0," + "\"0\")," +
-                        "(0," + "\"1\")," +
-                        "(1," + "\"0\")";
+                        "1," + "\"1\")," +
+                        "(1," + "\"2\")," +
+                        "(2," + "\"1\")";
+
+        //Scripts de inserción por defecto
+        public static final String INSERT_INFOPOINTS_SCRIPT =
+                "insert into "+INFO_POINT_TABLENAME+" values(" +
+                        "null," + "\"Punto1\"," + "\"0\"," + "\"NINGUNO\"," + "\"qr1\")," +
+                        "(null," + "\"Punto2\"," + "\"0\"," + "\"\"," + "\"qr2\")";
+
+        //Scripts de inserción por defecto
+        public static final String INSERT_IN_PROJ_SCRIPT =
+                "insert into "+IP_PROJ_TABLE_NAME+" values(" +
+                        "1," + "\"1\")," +
+                        "(2," + "\"1\")," +
+                        "(1," + "\"2\")";
 
         private DBHelper openHelper;
         private SQLiteDatabase database;
@@ -92,9 +157,32 @@ public class DBContract {
             database = openHelper.getWritableDatabase();
         }
 
-        public Cursor Select(String query)
+        public Cursor Select(String query, String[] selectionArgs)
         {
-            return database.rawQuery(query, null);
+            return database.rawQuery(query, selectionArgs);
+        }
+
+        public boolean InsertProject(String name,String description){
+            try {
+                String insert = "INSERT INTO " + PROJECTS_TABLE_NAME + " ("
+                        + ColumnProjects.NAME + ", "
+                        + ColumnProjects.DESCRIPTION + ", " + ColumnProjects.ID_TYPE + ", "
+                        + ColumnProjects.BACKGROUND + ") Values ('"+name+"', '"+description+"','' , '')";
+                database.execSQL(insert);
+                Cursor c = database.rawQuery("SELECT last_insert_rowid()",null);
+                c.moveToFirst();
+                int id = c.getInt(0);
+                String insert2 = "INSERT INTO " + USER_PROJ_TABLE_NAME + " ("
+                        + ColumnUser_proj.ID_USER + ", "
+                        + ColumnUser_proj.ID_PROJECT + ") Values ('1', '"+id+"')";
+                database.execSQL(insert2);
+                return true;
+            }
+            catch(SQLException e)
+            {
+                return false;
+            }
+
         }
 
 }

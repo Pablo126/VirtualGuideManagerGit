@@ -44,21 +44,22 @@ public class MainActivity extends ActionBarActivity {
         TextView tv_username = (TextView) findViewById(R.id.tvUsername);
         TextView tv_password = (TextView) findViewById(R.id.tvPassword);
         //Si existe el usuario
-        Cursor c1 = dataSource.Select("Select * from Users where username='"+tv_username.getText()+"' and password='"+tv_password.getText()+"'");
+        Cursor c1 = dataSource.Select("Select * from Users where username='"+tv_username.getText()+"' and password='"+tv_password.getText()+"'",null);
         if(c1.moveToNext())
         {
-            int id_usuario = c1.getInt(3);
+            int user_type = c1.getInt(3);
+            int id_user = c1.getInt(0);
             //Obtenemos el tipo de usuario que es
-            if(id_usuario== 0)
+            if(user_type== 0)
             {
                 Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.Main.class);
-                intent.putExtra("id_usuario",id_usuario);
+                intent.putExtra("id_usuario",id_user);
                 startActivity(intent);
             }
-            else if(id_usuario== 1)
+            else if(user_type== 1)
             {
                 Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Visitors.Main.class);
-                intent.putExtra("id_usuario",id_usuario);
+                intent.putExtra("id_usuario",id_user);
                 startActivity(intent);
             }
         }
@@ -67,7 +68,8 @@ public class MainActivity extends ActionBarActivity {
 
         }
 
-
     }
+
+
 
 }
