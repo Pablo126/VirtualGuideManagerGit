@@ -30,7 +30,16 @@
             android:label="@string/title_activity_main_vis" />
         <activity
             android:name=".Administrator.New_project"
-            android:label="@string/title_activity_new_project"></activity>
+            android:label="@string/title_activity_new_project" />
+        <activity
+            android:name=".Administrator.Modify_project"
+            android:label="@string/title_activity_modify_project" />
+        <activity
+            android:name=".Administrator.Main_users"
+            android:label="@string/title_activity_main_users" />
+        <activity
+            android:name=".Administrator.New_user"
+            android:label="@string/title_activity_new_user"></activity>
     </application>
 
 </manifest>

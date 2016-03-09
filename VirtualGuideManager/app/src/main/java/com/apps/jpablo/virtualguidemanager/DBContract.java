@@ -182,7 +182,36 @@ public class DBContract {
             {
                 return false;
             }
+        }
 
+        public boolean Delete(String table, String column_key, String[] where_values)
+        {
+            try {
+                database.delete(table, column_key + " = ?", where_values);
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
+
+        public boolean UpdateProject(int id_project, String name, String description)
+        {
+            try {
+                ContentValues values = new ContentValues();
+                values.put(ColumnProjects.NAME, name);
+                values.put(ColumnProjects.DESCRIPTION, description);
+
+                String selection = ColumnProjects.ID + " = ?";
+                String[] selectionArgs = {String.valueOf(id_project)};
+                database.update(PROJECTS_TABLE_NAME, values, selection, selectionArgs);
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
         }
 
 }

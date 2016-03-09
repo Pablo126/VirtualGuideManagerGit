@@ -7,8 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.apps.jpablo.virtualguidemanager.Administrator.Main">
-
+    tools:context="com.apps.jpablo.virtualguidemanager.Administrator.Main_users">
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,16 +22,16 @@
         android:longClickable="true" />
 
     <ImageButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_newuser"
         style="@style/FloatingActionButton"
         android:src="@drawable/plus"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="48dp"
         android:contentDescription="@null"
-        android:onClick="newProject"/>
+        android:onClick="newUser"/>
     <ImageButton
-        android:id="@+id/fab2"
+        android:id="@+id/fab_modifyuser"
         style="@style/FloatingActionButtonDelete"
         android:src="@drawable/pen"
         android:layout_alignParentEnd="true"
@@ -40,9 +39,9 @@
         android:layout_marginBottom="48dp"
         android:visibility="invisible"
         android:contentDescription="@null"
-        android:onClick="modifyProject"/>
+        android:onClick="modifyUser"/>
     <ImageButton
-        android:id="@+id/fab3"
+        android:id="@+id/fab_deleteuser"
         style="@style/FloatingActionButtonUpdate"
         android:src="@drawable/delete"
         android:layout_alignParentEnd="true"
@@ -52,5 +51,5 @@
         android:layout_marginRight="72dp"
 
         android:contentDescription="@null"
-        android:onClick="dialogDelete"/>
+        android:onClick="dialogDeleteUser"/>
 </RelativeLayout>

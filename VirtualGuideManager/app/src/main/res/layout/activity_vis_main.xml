@@ -9,4 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.apps.jpablo.virtualguidemanager.Visitors.Main">
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewVisitors"
+        style="@style/ListviewA"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:choiceMode="singleChoice"
+        android:drawSelectorOnTop="false"
+        android:longClickable="true" />
+
 </RelativeLayout>

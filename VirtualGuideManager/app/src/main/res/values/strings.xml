@@ -41,5 +41,13 @@
     <string name="proj_del_up">Choose a option:</string>
     <string name="proj_del">Delete</string>
     <string name="proj_up">Update</string>
+    <string name="title_activity_modify_project">Modify project</string>
+
+    <string name="menu_adm_projects">My projects</string>
+    <string name="menu_adm_users">User manager</string>
+    <string name="title_activity_main_users">User manager</string>
+    <string name="title_activity_new_user">New user</string>
+    <string name="available_projects">Available projects</string>
+
 
 </resources>
