@@ -162,7 +162,7 @@ public class DBContract {
             return database.rawQuery(query, selectionArgs);
         }
 
-        public boolean InsertProject(String name,String description){
+        public int InsertProject(String name,String description){
             try {
                 String insert = "INSERT INTO " + PROJECTS_TABLE_NAME + " ("
                         + ColumnProjects.NAME + ", "
@@ -176,6 +176,21 @@ public class DBContract {
                         + ColumnUser_proj.ID_USER + ", "
                         + ColumnUser_proj.ID_PROJECT + ") Values ('1', '"+id+"')";
                 database.execSQL(insert2);
+                return id;
+            }
+            catch(SQLException e)
+            {
+                return -1;
+            }
+        }
+
+        public boolean InsertInfopoint(String name,int type,String file, String qr){
+            try {
+                String insert = "INSERT INTO " + INFO_POINT_TABLENAME + " ("
+                        + ColumnInfopoint.NAME + ", "
+                        + ColumnInfopoint.ID_TYPE + ", " + ColumnInfopoint.FILE + ", "
+                        + ColumnInfopoint.QR + ") Values ('"+name+"', '"+type+"','"+file+"' , '"+qr+"')";
+                database.execSQL(insert);
                 return true;
             }
             catch(SQLException e)
@@ -206,6 +221,88 @@ public class DBContract {
                 String selection = ColumnProjects.ID + " = ?";
                 String[] selectionArgs = {String.valueOf(id_project)};
                 database.update(PROJECTS_TABLE_NAME, values, selection, selectionArgs);
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
+
+    public boolean UpdateInfopoint(int id_infopoint, String name, int type, String file, String qr)
+    {
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ColumnInfopoint.NAME, name);
+            values.put(ColumnInfopoint.ID_TYPE, type);
+            values.put(ColumnInfopoint.FILE, file);
+            values.put(ColumnInfopoint.QR, qr);
+            String selection = ColumnInfopoint.ID + " = ?";
+            String[] selectionArgs = {String.valueOf(id_infopoint)};
+            database.update(INFO_POINT_TABLENAME, values, selection, selectionArgs);
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+        public int InsertUser(String username,String password, int type) {
+            try {
+                String insert = "INSERT INTO " + USER_TABLE_NAME + " ("
+                        + ColumnUsers.USERNAME + ", "
+                        + ColumnUsers.PASSWORD + ", "
+                        + ColumnUsers.ID_TYPE + ") Values ('" + username + "', '" + password + "'," + type + ")";
+                database.execSQL(insert);
+                Cursor c = database.rawQuery("SELECT last_insert_rowid()", null);
+                c.moveToFirst();
+                int id = c.getInt(0);
+                return id;
+            } catch (SQLException e) {
+                return -1;
+            }
+        }
+
+        public boolean InsertUserProj(int id_user, int id_project){
+            try {
+                String insert = "INSERT INTO " + USER_PROJ_TABLE_NAME + " ("
+                        + ColumnUser_proj.ID_USER + ", "
+                        + ColumnUser_proj.ID_PROJECT + ") Values ('"+id_user+"', '"+id_project+"')";
+                database.execSQL(insert);
+                return true;
+            }
+            catch(SQLException e)
+            {
+                return false;
+            }
+        }
+
+        public boolean InsertInfoProj(int id_infopoint, int id_project){
+            try {
+                String insert = "INSERT INTO " + IP_PROJ_TABLE_NAME + " ("
+                        + ColumnIn_proj.ID_INFOPOINT + ", "
+                        + ColumnIn_proj.ID_PROJECT + ") Values ('"+id_infopoint+"', '"+id_project+"')";
+                database.execSQL(insert);
+                return true;
+            }
+            catch(SQLException e)
+            {
+                return false;
+            }
+        }
+
+        public boolean UpdateUser(int id_user, String username, String password, int type)
+        {
+            try {
+                ContentValues values = new ContentValues();
+                values.put(ColumnUsers.USERNAME, username);
+                values.put(ColumnUsers.PASSWORD, password);
+                values.put(ColumnUsers.ID_TYPE, type);
+
+                String selection = ColumnUsers.ID + " = ?";
+                String[] selectionArgs = {String.valueOf(id_user)};
+                database.update(USER_TABLE_NAME, values, selection, selectionArgs);
                 return true;
             }
             catch(Exception e)

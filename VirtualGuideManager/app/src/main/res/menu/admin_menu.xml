@@ -4,6 +4,8 @@
         android:title="@string/menu_adm_projects" />
     <item android:id="@+id/menu_users"
         android:title="@string/menu_adm_users" />
+    <item android:id="@+id/menu_infopoints"
+        android:title="@string/menu_adm_infopoints" />
 </menu>
 
 

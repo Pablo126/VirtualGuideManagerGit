@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="com.apps.jpablo.virtualguidemanager.Administrator.Modify_project">
+    tools:context="com.apps.jpablo.virtualguidemanager.Administrator.Modify_user">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/scrollView"
         android:layout_alignParentEnd="false"
         android:layout_alignParentTop="true"
@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/projectname"
                     style="@style/Title"
-                    android:id="@+id/lbProjectName"
+                    android:id="@+id/lbUsername"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
                     android:paddingBottom="5dp" />
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
-                    android:id="@+id/etName"
+                    android:id="@+id/etUsername"
                     android:textSize="18dp" />
             </LinearLayout>
 
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/description"
-                    android:id="@+id/lbDescription"
+                    android:id="@+id/lbUserPassword"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
                     android:paddingBottom="5dp" />
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
-                    android:id="@+id/etDescription"
+                    android:id="@+id/etUserPassword"
                     android:textSize="18dp" />
             </LinearLayout>
 
@@ -85,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/type"
-                    android:id="@+id/lbType"
+                    android:id="@+id/lbUserType"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
                     android:paddingBottom="5dp" />
@@ -95,36 +95,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
-                    android:id="@+id/etType"
+                    android:id="@+id/etUserType"
                     android:textSize="18dp" />
             </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:layout_marginBottom="20dp"
-                android:background="#EEEEEE">
-
-                <TextView
-                    style="@style/Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/background"
-                    android:id="@+id/textView"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:paddingBottom="5dp" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/editText"
-                    android:textSize="18dp" />
-            </LinearLayout>
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -139,8 +112,8 @@
                     style="@style/Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/available_infopoints"
-                    android:id="@+id/lbAvailableInfopoints"
+                    android:text="@string/available_projects"
+                    android:id="@+id/lbAvailableProjects"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
                     android:paddingBottom="3dp"
@@ -151,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Empty"
-                    android:id="@+id/tvlistInfopoints" />
+                    android:id="@+id/tvlistProjects" />
 
                 <Button
                     android:layout_width="wrap_content"
@@ -162,6 +135,8 @@
                     android:onClick="showProjectList" />
 
             </LinearLayout>
+
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -177,9 +152,10 @@
                     android:layout_weight="0.12"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:onClick="updateProject" />
+                    android:onClick="SaveUser"/>
             </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

@@ -3,17 +3,18 @@ package com.apps.jpablo.virtualguidemanager.Administrator;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.apps.jpablo.virtualguidemanager.DBContract;
+import com.apps.jpablo.virtualguidemanager.Project;
 import com.apps.jpablo.virtualguidemanager.R;
 
 import java.util.ArrayList;
@@ -24,7 +25,11 @@ public class New_user extends ActionBarActivity {
 
     DBContract dataSource;
     Cursor c1 = null;
-    String[] listProjects;
+    String[] listProjectsString;
+    int[] listProjectCheckedID;
+    boolean[] listProjectChecked;
+    //ArrayList with names of projects
+    ArrayList<Project> listProjects = new ArrayList<Project>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,37 +37,30 @@ public class New_user extends ActionBarActivity {
         setContentView(R.layout.activity_adm_new_user);
 
         dataSource = new DBContract(this);
+
+        loadAllProjects();
     }
 
     //Función para carga la lista ed proyectos
     public void loadAllProjects() {
-        //ArrayList with names of projects
-        ArrayList<String> listUsers = new ArrayList<String>();
-        //Query
+        //Query todos los proyectos
         String query = "Select "+DBContract.ColumnProjects.ID+", "+DBContract.ColumnProjects.NAME+" from "+ DBContract.PROJECTS_TABLE_NAME;
         c1 = dataSource.Select(query,null);
-        CharSequence[] items;
         //Adding results of query to arraylist
         c1.moveToFirst();
         do
         {
-            listUsers.add(c1.getString(1));
+            listProjects.add(new Project(c1.getInt(0),c1.getString(1),false));
         }
         while(c1.moveToNext());
 
-        String[] simpleArray = new String[ listUsers.size() ];
-        listUsers.toArray(simpleArray );
-        listProjects = simpleArray;
+        String[] ArrayStringProj = new String[listProjects.size()];
+        ArrayList<String> aux = new ArrayList<String>();
+        for(Project p : listProjects)
+            aux.add(p.getName());
+        aux.toArray(ArrayStringProj);
+        listProjectsString = ArrayStringProj;
 
-
-        //Rellenando el listview
-        ArrayAdapter<String> adapter;
-        adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listUsers);
-        ListView lv  =(ListView)findViewById(R.id.listView);
-        lv.setAdapter(adapter);
-        LinearLayout ll = (LinearLayout) findViewById(R.id.lineaLayout_projects);
-        lv.setMinimumHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-        ll.setMinimumHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
 
     }
 
@@ -80,24 +78,17 @@ public class New_user extends ActionBarActivity {
                     new AlertDialog.Builder(getActivity());
 
             builder.setTitle("Selección")
-                    .setMultiChoiceItems(items, null,
+                    .setMultiChoiceItems(items, listProjectChecked,
                             new DialogInterface.OnMultiChoiceClickListener() {
                                 public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+                                    listProjects.get(item).setSelected(isChecked);
                                     //Log.i("Dialogos", "Opción elegida: " + items[item]);
                                 }
                             });
-            /*builder.setTitle("Selección")
-                    .setSingleChoiceItems(items, -1,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int item) {
-                                    //Log.i("Dialogos", "Opción elegida: " + items[item]);
-                                }
-
-                            });*/
             builder.setNeutralButton("Terminar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                        refreshListProjectSelected();
                 }
             });
 
@@ -105,13 +96,76 @@ public class New_user extends ActionBarActivity {
         }
     }
 
+    public void refreshListProjectSelected()
+    {
+        String projectsSelected = "";
+        boolean[] aux = new boolean[listProjects.size()];
+        int[] aux2 = new int[listProjects.size()];
+        int count=0;
+        for(Project p : listProjects)
+        {
+            aux[count] = p.getSelected();
+            if(p.getSelected())
+            {
+                projectsSelected += (p.getName() + ", ");
+                aux2[count] = p.getID();
+            }
+            count++;
+        }
+        listProjectChecked = aux;
+        listProjectCheckedID = aux2;
+        if(!projectsSelected.isEmpty())
+            projectsSelected = projectsSelected.substring(0,projectsSelected.length()-2)+".";
+        TextView tv = (TextView) findViewById(R.id.tvlistProjects);
+        tv.setText(projectsSelected);
+    }
+
     public void showProjectList(View view)
     {
-        loadAllProjects();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        DialogoSeleccion dialogo = new DialogoSeleccion(listProjects);
+        DialogoSeleccion dialogo = new DialogoSeleccion(listProjectsString);
         dialogo.show(fragmentManager, "tagSeleccion");
     }
+
+    public void SaveUser(View view)
+    {
+        try
+        {
+            EditText etUsername = (EditText) findViewById(R.id.etUsername);
+            EditText etPassword = (EditText) findViewById(R.id.etUserPassword);
+            EditText etType = (EditText) findViewById(R.id.etUserType);
+            newUser(etUsername.getText().toString(),etPassword.getText().toString(),Integer.parseInt(etType.getText().toString()));
+            Intent resultado = new Intent();
+            setResult(RESULT_OK, resultado);
+            finish();
+        }
+        catch(Exception e)
+        {
+            Intent resultado = new Intent();
+            setResult(RESULT_CANCELED, resultado);
+            finish();
+        }
+    }
+
+    private boolean newUser(String name, String password, int type)
+    {
+        //Insertamos datos de usuario
+        int id_usuario_nuevo = dataSource.InsertUser(name,password,type);
+        if(id_usuario_nuevo != -1)
+        {
+            //Recorremos la lista de proyectos asociados al nuevo usuario.
+            for(int i=0;i<listProjectCheckedID.length;i++)
+            {
+                if(listProjectCheckedID[i]!=-0)
+                {
+                    dataSource.InsertUserProj(id_usuario_nuevo,listProjectCheckedID[i]);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 
 
 

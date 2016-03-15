@@ -1,6 +1,8 @@
 package com.apps.jpablo.virtualguidemanager.Administrator;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -30,6 +32,7 @@ public class Main_users extends ActionBarActivity {
     boolean SELECTED_ITEM = false;
     private static final int NEW_USER = 1;
     private static final int MODIFY_USER = 2;
+    Menu_adm m = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,8 @@ public class Main_users extends ActionBarActivity {
                 return onLongListItemClick(lv, pos, id);
             }
         });
+        //Inicializamos la clase menu para poder realizar los cambios de menu
+        m = new Menu_adm(this,id_user);
     }
 
     @Override
@@ -64,21 +69,18 @@ public class Main_users extends ActionBarActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_projects:
-                gotoProjectManager();
+                startActivity(m.gotoProjectManager());
                 return true;
             case R.id.menu_users:
+                return true;
+            case R.id.menu_infopoints:
+                startActivity(m.gotoInfopointsManager());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void gotoProjectManager()
-    {
-        Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.Main.class);
-        intent.putExtra("id_usuario",id_user);
-        startActivity(intent);
-    }
 
     //Función para carga la lista ed proyectos
     public void loadUsers() {
@@ -199,6 +201,47 @@ public class Main_users extends ActionBarActivity {
     public void newUser(View view) {
         Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.New_user.class);
         startActivityForResult(intent, NEW_USER, null);
+    }
+
+    public void modifyUser(View view)
+    {
+        int id_user = getSelectedItemListView();
+        Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.Modify_user.class);
+        intent.putExtra("id_usuario_mod",id_user);
+        startActivityForResult(intent, MODIFY_USER, null);
+    }
+
+    public void deleteProject()
+    {
+        int id = getSelectedItemListView();
+        String[] values = {String.valueOf(id)};
+        if(dataSource.Delete(DBContract.USER_TABLE_NAME, DBContract.ColumnUsers.ID, values)) {
+            dataSource.Delete(DBContract.USER_PROJ_TABLE_NAME, DBContract.ColumnUser_proj.ID_USER, values);
+            clearListView();
+        }
+        else
+            Toast.makeText(getApplicationContext(), "Can't delete the item. An error ocurred", Toast.LENGTH_SHORT).show();
+    }
+
+    public void dialogDeleteUser(View view)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Are you sure to delete this user?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteProject();
+            }
+        });
+        builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog alert=builder.create();
+        alert.show();
     }
 
 }

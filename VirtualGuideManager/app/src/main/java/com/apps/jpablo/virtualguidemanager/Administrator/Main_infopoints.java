@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,31 +20,31 @@ import android.widget.Toast;
 
 import com.apps.jpablo.virtualguidemanager.DBContract;
 import com.apps.jpablo.virtualguidemanager.R;
+
 import java.util.ArrayList;
 
-public class Main extends ActionBarActivity {
+public class Main_infopoints extends ActionBarActivity {
 
     DBContract dataSource;
     int id_user;
+    Cursor c1 = null;
     private static int save = -1;
     boolean SELECTED_ITEM = false;
-    private static final int NEW_PROJECT = 1;
-    private static final int MODIFY_PROJECT = 2;
-    Cursor c1 = null;
+    private static final int NEW_POINT = 1;
+    private static final int MODIFY_POINT = 2;
     Menu_adm m = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adm_main);
+        setContentView(R.layout.activity_adm_main_infopoints);
 
         //Crear nuevo objeto QuotesDataSource
         dataSource = new DBContract(this);
         //Recuperamos el id de usuario
         id_user = getIntent().getExtras().getInt("id_usuario");
-        //Cargamos los proyectos
-        loadProjects();
-    //Sobrecargamos el LongClick para seleccionar elementos.
+        //Cargamos la lista de usuarios
+        loadPoints();
+        //Sobrecargamos el LongClick para seleccionar elementos.
         final ListView lv  =(ListView)findViewById(R.id.listView);
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -55,6 +54,7 @@ public class Main extends ActionBarActivity {
         });
         //Inicializamos la clase menu para poder realizar los cambios de menu
         m = new Menu_adm(this,id_user);
+
     }
 
     @Override
@@ -69,19 +69,41 @@ public class Main extends ActionBarActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_projects:
+                startActivity(m.gotoProjectManager());
                 return true;
             case R.id.menu_users:
                 startActivity(m.gotoUserManager());
                 return true;
             case R.id.menu_infopoints:
-                startActivity(m.gotoInfopointsManager());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    //Función para carga la lista de infopoints
+    public void loadPoints() {
+        //ArrayList with names of projects
+        ArrayList<String> listPoints = new ArrayList<String>();
+        //Query
+        String query = "Select "+DBContract.ColumnInfopoint.ID+", "+DBContract.ColumnInfopoint.NAME+" from "+ DBContract.INFO_POINT_TABLENAME;
+        c1 = dataSource.Select(query,null);
+        //Adding results of query to arraylist
+        c1.moveToFirst();
+        do
+        {
+            listPoints.add(c1.getString(1));
+        }
+        while(c1.moveToNext());
 
+        //Rellenando el listview
+        ArrayAdapter<String> adapter;
+        adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listPoints);
+        ListView lv  =(ListView)findViewById(R.id.listView);
+        lv.setAdapter(adapter);
+    }
+
+    //Funcion para la seleccion de elementos para modificarlos y eliminarlos
     protected boolean onLongListItemClick(ListView v2, final int pos, long id) {
         /////Display Dialog Here.......................
         if(pos == save && SELECTED_ITEM == false) {
@@ -109,22 +131,47 @@ public class Main extends ActionBarActivity {
     private void showUpdateDelete(boolean selected)
     {
         if(selected) {
-            ImageButton ib1 = (ImageButton) findViewById(R.id.fab2);
+            ImageButton ib1 = (ImageButton) findViewById(R.id.fab_deleteinfopoint);
             ib1.setVisibility(View.VISIBLE);
-            ImageButton ib2 = (ImageButton) findViewById(R.id.fab3);
+            ImageButton ib2 = (ImageButton) findViewById(R.id.fab_modifyinfopoint);
             ib2.setVisibility(View.VISIBLE);
-            ImageButton ib3 = (ImageButton) findViewById(R.id.fab);
+            ImageButton ib3 = (ImageButton) findViewById(R.id.fab_newinfopoint);
             ib3.setVisibility(View.INVISIBLE);
         }
         else
         {
-            ImageButton ib1 = (ImageButton) findViewById(R.id.fab2);
+            ImageButton ib1 = (ImageButton) findViewById(R.id.fab_deleteinfopoint);
             ib1.setVisibility(View.INVISIBLE);
-            ImageButton ib2 = (ImageButton) findViewById(R.id.fab3);
+            ImageButton ib2 = (ImageButton) findViewById(R.id.fab_modifyinfopoint);
             ib2.setVisibility(View.INVISIBLE);
-            ImageButton ib3 = (ImageButton) findViewById(R.id.fab);
+            ImageButton ib3 = (ImageButton) findViewById(R.id.fab_newinfopoint);
             ib3.setVisibility(View.VISIBLE);
         }
+    }
+
+    //Devuelve el id del usuario seleccionado de la lista
+    public int getSelectedItemListView() {
+        c1.moveToFirst();
+        c1.moveToPosition(save);
+        return c1.getInt(0);
+    }
+
+    //Clear the seleted items of listview
+    public void clearListView()
+    {
+        loadPoints();
+        save = -1;
+        SELECTED_ITEM = false;
+        showUpdateDelete(SELECTED_ITEM);
+    }
+
+    //Sobrecargamos onBackPressed para que en caso de tener un elemento seleccionado lo deseleccione
+    @Override
+    public void onBackPressed() {
+        if(SELECTED_ITEM)
+            clearListView();
+        else
+            finish();
     }
 
     @Override
@@ -134,16 +181,16 @@ public class Main extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode) {
-            case NEW_PROJECT:
+            case NEW_POINT:
                 if (resultCode == Activity.RESULT_OK)
                 {
-                    loadProjects();
+                    loadPoints();
                 }
                 else if(resultCode == Activity.RESULT_CANCELED)
                 {
                 }
                 break;
-            case MODIFY_PROJECT:
+            case MODIFY_POINT:
                 if(resultCode == Activity.RESULT_OK)
                     Toast.makeText(getApplicationContext(), "Element modified successfully.", Toast.LENGTH_SHORT).show();
                 clearListView();
@@ -151,70 +198,42 @@ public class Main extends ActionBarActivity {
         }
     }
 
-
-    //Función para carga la lista ed proyectos
-    public void loadProjects() {
-        //ArrayList with names of projects
-        ArrayList<String> listProjects = new ArrayList<String>();
-        //Query
-        String query = "Select P."+DBContract.ColumnProjects.ID+", P."+DBContract.ColumnProjects.NAME+" from "+
-                DBContract.USER_PROJ_TABLE_NAME+" UP, "+DBContract.PROJECTS_TABLE_NAME+" P where UP."+DBContract.ColumnUser_proj.ID_USER+"="+id_user+
-                " and P."+DBContract.ColumnProjects.ID+" = UP."+DBContract.ColumnUser_proj.ID_PROJECT;
-        c1 = dataSource.Select(query,null);
-        //Adding results of query to arraylist
-        c1.moveToFirst();
-        do
-        {
-            listProjects.add(c1.getString(1));
-        }
-        while(c1.moveToNext());
-
-        //Rellenando el listview
-        ArrayAdapter<String> adapter;
-        adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listProjects);
-        ListView lv  =(ListView)findViewById(R.id.listView);
-        lv.setAdapter(adapter);
-    }
-
     //FUNCIONES PARA AÑADIR, BORRAR Y ACTUALIZAR UN PROYECTO------------------------------------------
-    public void newProject(View view) {
-        Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.New_project.class);
-        startActivityForResult(intent, NEW_PROJECT, null);
+    public void newInfopoint(View view) {
+        Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.New_point.class);
+        startActivityForResult(intent, NEW_POINT, null);
     }
 
-    public void deleteProject()
+    public void modifyInfopoint(View view)
+    {
+        int id_point = getSelectedItemListView();
+        Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.Modify_point.class);
+        intent.putExtra("id_punto_mod",id_point);
+        startActivityForResult(intent, MODIFY_POINT, null);
+    }
+
+    public void deletePoint()
     {
         int id = getSelectedItemListView();
         String[] values = {String.valueOf(id)};
-        String[] values_user = {String.valueOf(id_user)};
-        //Borrado en cascada de  proyecto, enlaces de proyecto con usuario y enlaces de puntos de informacion con proyecto.
-        if(dataSource.Delete(DBContract.PROJECTS_TABLE_NAME, DBContract.ColumnProjects.ID, values)) {
-            if (dataSource.Delete(DBContract.USER_PROJ_TABLE_NAME, DBContract.ColumnUser_proj.ID_USER, values_user))
-                if(dataSource.Delete(DBContract.IP_PROJ_TABLE_NAME,DBContract.ColumnIn_proj.ID_PROJECT,values))
-                    clearListView();
+        if(dataSource.Delete(DBContract.INFO_POINT_TABLENAME, DBContract.ColumnInfopoint.ID, values)) {
+            dataSource.Delete(DBContract.IP_PROJ_TABLE_NAME, DBContract.ColumnIn_proj.ID_INFOPOINT, values);
+            clearListView();
         }
         else
             Toast.makeText(getApplicationContext(), "Can't delete the item. An error ocurred", Toast.LENGTH_SHORT).show();
     }
 
-    public void modifyProject(View view)
-    {
-        int id_proj = getSelectedItemListView();
-        Intent intent = new Intent(this, com.apps.jpablo.virtualguidemanager.Administrator.Modify_project.class);
-        intent.putExtra("id_project",id_proj);
-        startActivityForResult(intent, MODIFY_PROJECT, null);
-
-    }
-
-    public void dialogDelete(View view)
+    //Dialogoo de advertencia para comprobar el deseo de eliminar
+    public void dialogDeleteInfopoint(View view)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setMessage("Are you sure to delete this project?");
+        builder.setMessage("Are you sure to delete this user?");
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteProject();
+                deletePoint();
             }
         });
         builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -227,30 +246,5 @@ public class Main extends ActionBarActivity {
         alert.show();
     }
 
-    //-------------------------------------------------------------------------------------------------
-
-    //Devuelve el id del proyecto seleccionado
-    public int getSelectedItemListView() {
-        c1.moveToFirst();
-        c1.moveToPosition(save);
-        return c1.getInt(0);
-    }
-
-    //Clear the seleted items of listview
-    public void clearListView()
-    {
-        loadProjects();
-        save = -1;
-        SELECTED_ITEM = false;
-        showUpdateDelete(SELECTED_ITEM);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(SELECTED_ITEM)
-            clearListView();
-        else
-            finish();
-    }
 
 }

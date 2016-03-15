@@ -102,7 +102,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="116dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/border"
                 android:id="@+id/lineaLayout_projects"
@@ -117,34 +117,24 @@
                         android:id="@+id/lbAvailableProjects"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"
-                        android:paddingBottom="5dp"
+                        android:paddingBottom="3dp"
                         />
-                    <ListView
-                        android:layout_width="wrap_content"
-                        android:layout_height="69dp"
-                        android:id="@+id/listView"
-                        style="@style/ListviewA"
-                        android:layout_centerHorizontal="true"
-                        android:layout_alignParentTop="true"
-                        android:footerDividersEnabled="true"
-                        android:headerDividersEnabled="true"
-                        android:choiceMode="singleChoice"
-                        android:drawSelectorOnTop="false"
-                        android:longClickable="true"
-                        />
-                    <ImageButton
-                        android:id="@+id/fab_addproject"
-                        style="@style/FloatingActionButton"
-                        android:src="@drawable/plus"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="15dp"
-                        android:contentDescription="@null"
-                        android:onClick="showProjectList"
-                        android:layout_gravity="right"
-                        android:layout_width="33dp"
-                        android:layout_height="33dp"
-                        android:layout_marginRight="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Empty"
+                    android:id="@+id/tvlistProjects" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Modify"
+                    android:id="@+id/modifyList"
+                    android:layout_gravity="right"
+                    android:onClick="showProjectList" />
+
             </LinearLayout>
 
 
@@ -163,7 +153,7 @@
                     android:layout_weight="0.12"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:onClick=""/>
+                    android:onClick="SaveUser"/>
             </RelativeLayout>
 
         </LinearLayout>
