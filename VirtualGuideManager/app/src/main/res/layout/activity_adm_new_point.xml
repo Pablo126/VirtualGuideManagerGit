@@ -90,13 +90,26 @@
                     android:layout_alignParentStart="true"
                     android:paddingBottom="5dp" />
 
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:id="@+id/etInfopointFile"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:enabled="false"/>
+
+                <Button
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="File"
+                    android:id="@+id/buttonfile"
+                    android:onClick="openFolder"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -116,13 +129,28 @@
                     android:layout_alignParentStart="true"
                     android:paddingBottom="5dp" />
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/etInfopointQR"
-                    android:textSize="18dp" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:ems="10"
+                        android:id="@+id/etInfopointQR"
+                        android:textSize="18dp"
+                        android:editable="true"
+                        android:enabled="false" />
+
+                    <Button
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:text="SCAN QR"
+                        android:id="@+id/buttonqr"
+                        android:onClick="scanQR"/>
+                </LinearLayout>
             </LinearLayout>
 
             <RelativeLayout

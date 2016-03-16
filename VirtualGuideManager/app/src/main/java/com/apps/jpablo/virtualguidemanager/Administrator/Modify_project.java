@@ -1,11 +1,15 @@
 package com.apps.jpablo.virtualguidemanager.Administrator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -199,5 +203,41 @@ public class Modify_project extends ActionBarActivity {
             return builder.create();
         }
     }
+
+    //----------------------FILES------------------------
+    public void openFolder(View view)
+    {
+        String folderPath = Environment.getExternalStorageDirectory()+"/VirtualGuideContent";
+        Uri myUri = Uri.parse(folderPath);
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setDataAndType(myUri, "file/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //startActivityForResult(intent, 1);
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), 0);
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void  onActivityResult(int requestCode, int resultCode, Intent intent){
+
+        switch (requestCode) {
+            case 0:
+            {
+                if (resultCode == RESULT_OK) {
+                    String contents = intent.getData().getLastPathSegment();
+                    TextView tv = (TextView) findViewById(R.id.etFile);
+                    tv.setText(contents);
+                }
+                break;
+            }
+        }
+    }
+
+
 
 }
