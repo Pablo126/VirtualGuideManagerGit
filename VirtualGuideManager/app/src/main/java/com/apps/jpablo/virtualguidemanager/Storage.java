@@ -7,25 +7,31 @@ import android.os.Environment;
  */
 public class Storage {
 
-    private String path_folder;
-    private boolean external;
+    private String path_folder = "/storage/sdcard1/";
+    private String name_folder = "VirtualGuideContent/";
+    private String path;
     private DBContract dataSource=null;
-    public Storage(String path,boolean external_on)
-    {
-        path_folder = path;
-        external = external_on;
-    }
-
-    //Crea un objeto de base de datos, consulta los valores y los establece automaticamente.
     public Storage()
     {
-
+        path = path_folder+name_folder;
     }
 
-    public void setPath(String path)
+    public String getFullPath()
+    {
+        return path;
+    }
+
+
+    public void setPathFolder(String path)
     {
         path_folder = path;
         setPathDatabase(path);
+    }
+
+    public void setNameFolder(String name)
+    {
+        name_folder = name;
+        setNameFolderDatabase(name);
     }
 
     //Realiza la actualización de campo en la base de datos
@@ -34,14 +40,11 @@ public class Storage {
 
     }
 
+    //Realiza la actualización de campo en la base de datos
+    private void setNameFolderDatabase(String name_folder)
+    {
 
-
-    public boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
     }
+
+
 }

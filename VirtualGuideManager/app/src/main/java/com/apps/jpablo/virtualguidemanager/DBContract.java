@@ -162,12 +162,12 @@ public class DBContract {
             return database.rawQuery(query, selectionArgs);
         }
 
-        public int InsertProject(String name,String description){
+        public int InsertProject(String name,String description, int type_proj, String background){
             try {
                 String insert = "INSERT INTO " + PROJECTS_TABLE_NAME + " ("
                         + ColumnProjects.NAME + ", "
                         + ColumnProjects.DESCRIPTION + ", " + ColumnProjects.ID_TYPE + ", "
-                        + ColumnProjects.BACKGROUND + ") Values ('"+name+"', '"+description+"','' , '')";
+                        + ColumnProjects.BACKGROUND + ") Values ('"+name+"', '"+description+"','"+type_proj+"' , '"+background+"')";
                 database.execSQL(insert);
                 Cursor c = database.rawQuery("SELECT last_insert_rowid()",null);
                 c.moveToFirst();
@@ -211,13 +211,14 @@ public class DBContract {
             }
         }
 
-        public boolean UpdateProject(int id_project, String name, String description)
+        public boolean UpdateProject(int id_project, String name, String description, int type, String background)
         {
             try {
                 ContentValues values = new ContentValues();
                 values.put(ColumnProjects.NAME, name);
                 values.put(ColumnProjects.DESCRIPTION, description);
-
+                values.put(ColumnProjects.ID_TYPE, type);
+                values.put(ColumnProjects.BACKGROUND, background);
                 String selection = ColumnProjects.ID + " = ?";
                 String[] selectionArgs = {String.valueOf(id_project)};
                 database.update(PROJECTS_TABLE_NAME, values, selection, selectionArgs);

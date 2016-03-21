@@ -62,7 +62,7 @@
                         android:id="@+id/tvUsername"
                         android:layout_weight="0.63"
                         android:singleLine="true"
-                        android:text="Admin" />
+                        android:text="User1" />
                 </LinearLayout>
 
                 <LinearLayout

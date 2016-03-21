@@ -186,10 +186,9 @@ public class Main extends ActionBarActivity {
     {
         int id = getSelectedItemListView();
         String[] values = {String.valueOf(id)};
-        String[] values_user = {String.valueOf(id_user)};
         //Borrado en cascada de  proyecto, enlaces de proyecto con usuario y enlaces de puntos de informacion con proyecto.
         if(dataSource.Delete(DBContract.PROJECTS_TABLE_NAME, DBContract.ColumnProjects.ID, values)) {
-            if (dataSource.Delete(DBContract.USER_PROJ_TABLE_NAME, DBContract.ColumnUser_proj.ID_USER, values_user))
+            if (dataSource.Delete(DBContract.USER_PROJ_TABLE_NAME, DBContract.ColumnUser_proj.ID_PROJECT, values))
                 if(dataSource.Delete(DBContract.IP_PROJ_TABLE_NAME,DBContract.ColumnIn_proj.ID_PROJECT,values))
                     clearListView();
         }

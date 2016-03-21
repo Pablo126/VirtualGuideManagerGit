@@ -1,8 +1,13 @@
 package com.apps.jpablo.virtualguidemanager.Visitors;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.internal.widget.AdapterViewCompat;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -16,6 +21,7 @@ public class Main extends ActionBarActivity {
     int id_user;
     Cursor c1 = null;
     DBContract dataSource;
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,24 @@ public class Main extends ActionBarActivity {
         id_user = getIntent().getExtras().getInt("id_usuario");
         //Cargamos los proyectos
         loadProjects();
+
+        lv.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View view,
+                                            int position, long id) {
+                        onListItemClick(lv,position,id);
+                    }
+                }
+        );
+    }
+
+    protected void onListItemClick(ListView lv, final int pos,long id)
+    {
+        int id_proj = getSelectedItemListView(pos);
+        Intent intent = new Intent(this,com.apps.jpablo.virtualguidemanager.Visitors.Project_selected.class);
+        intent.putExtra("id_project", id_proj);
+        startActivity(intent);
     }
 
     //Función para carga la lista ed proyectos
@@ -50,8 +74,16 @@ public class Main extends ActionBarActivity {
         //Rellenando el listview
         ArrayAdapter<String> adapter;
         adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listProjects);
-        ListView lv  =(ListView)findViewById(R.id.listViewVisitors);
+        lv  =(ListView)findViewById(R.id.listViewVisitors);
         lv.setAdapter(adapter);
+    }
+
+
+    //Devuelve el id del proyecto seleccionado
+    public int getSelectedItemListView(int pos) {
+        c1.moveToFirst();
+        c1.moveToPosition(pos);
+        return c1.getInt(0);
     }
 
 }

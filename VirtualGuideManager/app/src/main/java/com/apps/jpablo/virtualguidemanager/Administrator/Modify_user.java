@@ -157,8 +157,11 @@ public class Modify_user extends ActionBarActivity {
             String[] values = {String.valueOf(id_usuario)};
             if(dataSource.Delete(DBContract.USER_PROJ_TABLE_NAME, DBContract.ColumnUser_proj.ID_USER, values))
             {
+                int limite = 0;
+                if(listProjectCheckedID!=null)
+                    limite = listProjectCheckedID.length;
                 //Recorremos la lista de proyectos asociados al nuevo usuario.
-                for (int i = 0; i < listProjectCheckedID.length; i++) {
+                for (int i = 0; i < limite; i++) {
                     if (listProjectCheckedID[i] != -0) {
                         dataSource.InsertUserProj(id_usuario, listProjectCheckedID[i]);
                     }

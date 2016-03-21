@@ -28,7 +28,7 @@ public class Modify_project extends ActionBarActivity {
 
     DBContract dataSource;
     int id_project;
-    TextView tv_name, tv_description;
+    TextView tv_name, tv_description, tv_type, tv_background;
 
     Cursor c1 = null;
     String[] listInfopointsString;
@@ -54,8 +54,12 @@ public class Modify_project extends ActionBarActivity {
         {
             tv_name = (TextView) findViewById(R.id.etName);
             tv_description = (TextView) findViewById(R.id.etDescription);
+            tv_type = (TextView) findViewById(R.id.etType);
+            tv_background = (TextView) findViewById(R.id.etBackground);
             tv_name.setText(c.getString(1));
             tv_description.setText(c.getString(2));
+            tv_type.setText(String.valueOf(c.getInt(3)));
+            tv_background.setText(c.getString(4));
         }
 
         loadAllInfopoints();
@@ -140,14 +144,17 @@ public class Modify_project extends ActionBarActivity {
 
     public void updateProject(View view)
     {
-        if(dataSource.UpdateProject(id_project,tv_name.getText().toString(),tv_description.getText().toString()))
+        if(dataSource.UpdateProject(id_project,tv_name.getText().toString(),tv_description.getText().toString(),Integer.parseInt(tv_type.getText().toString()),tv_background.getText().toString()))
         {
             //Eliminamos los proyectos anteriormente enlazados a este usuario
             String[] values = {String.valueOf(id_project)};
             if(dataSource.Delete(DBContract.IP_PROJ_TABLE_NAME, DBContract.ColumnIn_proj.ID_PROJECT, values))
             {
+                int limite = 0;
+                if(listInfopointsCheckedID!=null)
+                    limite = listInfopointsCheckedID.length;
                 //Recorremos la lista de proyectos asociados al nuevo usuario.
-                for (int i = 0; i < listInfopointsCheckedID.length; i++) {
+                for (int i = 0; i < limite; i++) {
                     if (listInfopointsCheckedID[i] != -0) {
                         dataSource.InsertInfoProj(listInfopointsCheckedID[i],id_project);
                     }
@@ -230,7 +237,7 @@ public class Modify_project extends ActionBarActivity {
             {
                 if (resultCode == RESULT_OK) {
                     String contents = intent.getData().getLastPathSegment();
-                    TextView tv = (TextView) findViewById(R.id.etFile);
+                    TextView tv = (TextView) findViewById(R.id.etBackground);
                     tv.setText(contents);
                 }
                 break;

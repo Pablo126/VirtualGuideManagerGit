@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
                         android:ems="10"
-                        android:id="@+id/etFile"
+                        android:id="@+id/etBackground"
                         android:textSize="18dp" />
                     <Button
                         android:layout_width="110dp"

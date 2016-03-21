@@ -153,8 +153,11 @@ public class New_user extends ActionBarActivity {
         int id_usuario_nuevo = dataSource.InsertUser(name,password,type);
         if(id_usuario_nuevo != -1)
         {
+            int limite = 0;
+            if(listProjectCheckedID!=null)
+                limite = listProjectCheckedID.length;
             //Recorremos la lista de proyectos asociados al nuevo usuario.
-            for(int i=0;i<listProjectCheckedID.length;i++)
+            for(int i=0;i<limite;i++)
             {
                 if(listProjectCheckedID[i]!=-0)
                 {

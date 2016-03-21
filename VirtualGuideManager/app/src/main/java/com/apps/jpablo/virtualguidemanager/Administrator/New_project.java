@@ -47,8 +47,10 @@ public class New_project extends ActionBarActivity {
         //Obtenemos los valores de los campos
         TextView tv_name = (TextView) findViewById(R.id.etName);
         TextView tv_description = (TextView) findViewById(R.id.etDescription);
+        TextView tv_type = (TextView) findViewById(R.id.etType);
+        TextView tv_background = (TextView) findViewById(R.id.etBackground);
         //Llamamos a la función de insercción en base de datos
-        if(newProject(tv_name.getText().toString(),tv_description.getText().toString()))
+        if(newProject(tv_name.getText().toString(),tv_description.getText().toString(),Integer.parseInt(tv_type.getText().toString()),tv_background.getText().toString()))
         {
             Intent resultado = new Intent();
             setResult(RESULT_OK, resultado);
@@ -147,13 +149,16 @@ public class New_project extends ActionBarActivity {
         dialogo.show(fragmentManager, "tagSeleccion");
     }
 
-    private boolean newProject(String name, String description)
+    private boolean newProject(String name, String description, int type, String background_path)
     {
-        int id_nuevo_proyecto = dataSource.InsertProject(name,description);
+        int id_nuevo_proyecto = dataSource.InsertProject(name,description, type, background_path);
         if(id_nuevo_proyecto != -1)
         {
+            int limit = 0;
+            if(listInfopointsCheckedID!= null)
+                limit = listInfopointsCheckedID.length;
             //Recorremos la lista de proyectos asociados al nuevo usuario.
-            for(int i=0;i<listInfopointsCheckedID.length;i++)
+            for(int i=0;i<limit;i++)
             {
                 if(listInfopointsCheckedID[i]!=-0)
                 {
@@ -191,7 +196,7 @@ public class New_project extends ActionBarActivity {
             {
                 if (resultCode == RESULT_OK) {
                     String contents = intent.getData().getLastPathSegment();
-                    TextView tv = (TextView) findViewById(R.id.etFile);
+                    TextView tv = (TextView) findViewById(R.id.etBackground);
                     tv.setText(contents);
                 }
                 break;
