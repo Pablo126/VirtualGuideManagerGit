@@ -156,10 +156,6 @@ public class Project_selected extends Activity {
         return "";
     }
 
-    private String getType_file(String file)
-    {
-        return file.substring(file.lastIndexOf(".") + 1, file.length());
-    }
 
 
 
