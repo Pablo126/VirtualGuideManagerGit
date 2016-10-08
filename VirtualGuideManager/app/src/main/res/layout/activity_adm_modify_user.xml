@@ -80,23 +80,32 @@
                 android:layout_marginBottom="20dp"
                 android:background="#EEEEEE">
 
-                <TextView
-                    style="@style/Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/type"
-                    android:id="@+id/lbUserType"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:paddingBottom="5dp" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FFFFFF">
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/etUserType"
-                    android:textSize="18dp" />
+                    <TextView
+                        style="@style/Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/type"
+                        android:id="@+id/lbUserType"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:paddingBottom="5dp" />
+
+                    <Spinner
+                        android:layout_width="239dp"
+                        android:layout_height="wrap_content"
+                        android:background="#EEEEEE"
+                        android:id="@+id/tvUserType"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:spinnerMode="dialog" />
+                </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:orientation="vertical"

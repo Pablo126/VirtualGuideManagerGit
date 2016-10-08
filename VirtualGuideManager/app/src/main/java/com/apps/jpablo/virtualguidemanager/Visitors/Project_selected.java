@@ -2,7 +2,6 @@ package com.apps.jpablo.virtualguidemanager.Visitors;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,20 +12,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
 import com.apps.jpablo.virtualguidemanager.R;
-import com.apps.jpablo.virtualguidemanager.Storage;
+import com.apps.jpablo.virtualguidemanager.Classes.Storage;
 
 import java.io.File;
 
@@ -50,7 +40,7 @@ public class Project_selected extends Activity {
         Cursor c = dataSource.Select("Select * from "+DBContract.PROJECTS_TABLE_NAME+" where "+DBContract.ColumnProjects.ID+"="+id_project,null);
         if(c.moveToFirst())
         {
-            background = c.getString(4);
+            background = c.getString(3);
 
         }
         Storage st = new Storage();
@@ -133,7 +123,7 @@ public class Project_selected extends Activity {
             case 0: {
                 if (resultCode == RESULT_OK) {
                     String contents = intent.getStringExtra("SCAN_RESULT");
-                    String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                    //String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                     Intent intent2 = new Intent(this, com.apps.jpablo.virtualguidemanager.Visitors.Show_file.class);
                     String file_name = getFilePathFromInfopoint(contents);
                     intent2.putExtra("file_name",file_name);

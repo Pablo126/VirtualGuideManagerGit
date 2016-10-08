@@ -1,4 +1,4 @@
-package com.apps.jpablo.virtualguidemanager;
+package com.apps.jpablo.virtualguidemanager.Classes;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
 import com.apps.jpablo.virtualguidemanager.R;
 
 import java.util.ArrayList;

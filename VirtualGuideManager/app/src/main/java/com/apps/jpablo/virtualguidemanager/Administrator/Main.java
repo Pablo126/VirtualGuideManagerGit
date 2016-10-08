@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
 import com.apps.jpablo.virtualguidemanager.R;
 import java.util.ArrayList;
 

@@ -14,14 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
 import com.apps.jpablo.virtualguidemanager.R;
 
 public class Modify_point extends ActionBarActivity {
 
     DBContract dataSource;
     int id_infopoint;
-    TextView tv_name, tv_type, tv_file, tv_qr;
+    TextView tv_name, tv_file, tv_qr;
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
 
     @Override
@@ -40,13 +40,11 @@ public class Modify_point extends ActionBarActivity {
         if(c.moveToFirst())
         {
             tv_name = (TextView) findViewById(R.id.etInfopointName);
-            tv_type = (TextView) findViewById(R.id.etInfopointType);
             tv_file = (TextView) findViewById(R.id.etInfopointFile);
             tv_qr = (TextView) findViewById(R.id.etInfopointQR);
             tv_name.setText(c.getString(1));
-            tv_type.setText(String.valueOf(c.getInt(2)));
-            tv_file.setText(c.getString(3));
-            tv_qr.setText(c.getString(4));
+            tv_file.setText(c.getString(2));
+            tv_qr.setText(c.getString(3));
         }
     }
 
@@ -63,7 +61,7 @@ public class Modify_point extends ActionBarActivity {
 
     public void updateInfopoint(View view)
     {
-        if(dataSource.UpdateInfopoint(id_infopoint, tv_name.getText().toString(), Integer.parseInt(tv_type.getText().toString()), tv_file.getText().toString(), tv_qr.getText().toString()))
+        if(dataSource.UpdateInfopoint(id_infopoint, tv_name.getText().toString(), tv_file.getText().toString(), tv_qr.getText().toString()))
         {
             Intent resultado = new Intent();
             setResult(RESULT_OK, resultado);

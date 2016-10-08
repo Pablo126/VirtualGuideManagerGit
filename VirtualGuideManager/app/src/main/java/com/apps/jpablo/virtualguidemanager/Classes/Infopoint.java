@@ -1,4 +1,4 @@
-package com.apps.jpablo.virtualguidemanager;
+package com.apps.jpablo.virtualguidemanager.Classes;
 
 /**
  * Created by JuanPablo on 15/03/2016.

@@ -1,17 +1,15 @@
 package com.apps.jpablo.virtualguidemanager.Visitors;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
 import com.apps.jpablo.virtualguidemanager.R;
 
 import java.util.ArrayList;

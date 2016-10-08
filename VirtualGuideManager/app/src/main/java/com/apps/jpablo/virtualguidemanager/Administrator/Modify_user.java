@@ -10,14 +10,19 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
-import com.apps.jpablo.virtualguidemanager.Project;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.Project;
+import com.apps.jpablo.virtualguidemanager.Classes.User_type;
 import com.apps.jpablo.virtualguidemanager.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Modify_user extends ActionBarActivity {
 
@@ -30,7 +35,8 @@ public class Modify_user extends ActionBarActivity {
     //ArrayList with names of projects
     ArrayList<Project> listProjects = new ArrayList<Project>();
     int id_usuario;
-    TextView tv_username, tv_password, tv_type;
+    TextView tv_username, tv_password;
+    Spinner tv_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +48,26 @@ public class Modify_user extends ActionBarActivity {
 
         dataSource = new DBContract(this);
 
+        Spinner spinner = (Spinner) findViewById(R.id.tvUserType);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,R.layout.support_simple_spinner_dropdown_item);
+        List<User_type> Users = Arrays.asList(User_type.values());
+        List<String> combo = new ArrayList<String>();
+        for(User_type u : Users){
+            combo.add(u.getName(this.getResources()));}
+        adapter.addAll(combo);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         //Hacemos una consulta a database para cargar los datos
         Cursor c = dataSource.Select("Select * from "+DBContract.USER_TABLE_NAME+" where "+DBContract.ColumnUsers.ID+"="+id_usuario,null);
         if(c.moveToFirst())
         {
             tv_username = (TextView) findViewById(R.id.etUsername);
             tv_password = (TextView) findViewById(R.id.etUserPassword);
-            tv_type = (TextView) findViewById(R.id.etUserType);
+            tv_type = (Spinner) findViewById(R.id.tvUserType);
             tv_username.setText(c.getString(1));
             tv_password.setText(c.getString(2));
-            tv_type.setText(String.valueOf(c.getInt(3)));
+            tv_type.setSelection(c.getInt(3));
         }
 
         loadAllProjects();
@@ -127,8 +143,8 @@ public class Modify_user extends ActionBarActivity {
         {
             EditText etUsername = (EditText) findViewById(R.id.etUsername);
             EditText etPassword = (EditText) findViewById(R.id.etUserPassword);
-            EditText etType = (EditText) findViewById(R.id.etUserType);
-            if(modifyUser(etUsername.getText().toString(), etPassword.getText().toString(), Integer.parseInt(etType.getText().toString())))
+            Spinner etType = (Spinner) findViewById(R.id.tvUserType);
+            if(modifyUser(etUsername.getText().toString(), etPassword.getText().toString(), etType.getSelectedItemPosition()))
             {
                 Intent resultado = new Intent();
                 setResult(RESULT_OK, resultado);

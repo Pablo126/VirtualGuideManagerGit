@@ -1,28 +1,23 @@
 package com.apps.jpablo.virtualguidemanager.Visitors;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+import com.apps.jpablo.virtualguidemanager.Classes.File_type;
 
 import com.apps.jpablo.virtualguidemanager.R;
-import com.apps.jpablo.virtualguidemanager.Storage;
+import com.apps.jpablo.virtualguidemanager.Classes.Storage;
 
 import java.io.File;
 
@@ -41,7 +36,7 @@ public class Show_file extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vis_show_file);
-
+        //new File(new File("/storage/").listFiles()[0]+"/VirtualGuideContent/Cover.jpg").isFile()
         file_name = getIntent().getExtras().getString("file_name");
         String path = st.getFullPath() + file_name;
         im = (ImageView) findViewById(R.id.imageView);
@@ -59,10 +54,6 @@ public class Show_file extends Activity {
         if(imgFile.exists()) {
             showFile(typeFile(file_name), imgFile);
         }
-
-
-
-
     }
 
 
@@ -76,8 +67,7 @@ public class Show_file extends Activity {
             case 1: {//JPG
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 im.setImageBitmap(myBitmap);
-                vv.setVisibility(View.INVISIBLE);
-                tv.setVisibility(View.INVISIBLE);
+                im.setVisibility(View.VISIBLE);
                 break;
             }
             case 2: {//VIDEO
@@ -88,8 +78,7 @@ public class Show_file extends Activity {
                 vv.setMediaController(mc);
                 vv.setVideoURI(video);
                 vv.start();
-                im.setVisibility(View.INVISIBLE);
-                tv.setVisibility(View.INVISIBLE);
+                vv.setVisibility(View.VISIBLE);
                 break;
             }
             case 3: { //AUDIO
@@ -100,9 +89,9 @@ public class Show_file extends Activity {
                 vv.setMediaController(mc);
                 vv.setVideoURI(video);
                 tv.setText(file_name);
-                im.setVisibility(View.INVISIBLE);
-                vv.setBackgroundColor(Color.WHITE);
-                vv.setBackgroundColor(Color.TRANSPARENT);
+                tv.setVisibility(View.VISIBLE);
+                //vv.setBackgroundColor(Color.WHITE);
+                //vv.setBackgroundColor(Color.TRANSPARENT);
                 break;
             }
             case 4: {//PDF
@@ -125,11 +114,6 @@ public class Show_file extends Activity {
         }
     }
 
-    private static final int IMAGE = 1;
-    private static final int VIDEO = 2;
-    private static final int AUDIO = 3;
-    private static final int PDF = 4;
-    private static final int UNKNOWN = 0;
 
     private int typeFile(String file_name)
     {
@@ -139,15 +123,17 @@ public class Show_file extends Activity {
         switch(extension)
         {
             case "jpg":
-                value = IMAGE; break;
+                value = File_type.IMAGE.getValue(); break;
             case "png":
-                value = IMAGE; break;
+                value = File_type.IMAGE.getValue(); break;
             case "mp4":
-                value = VIDEO; break;
+                value = File_type.VIDEO.getValue(); break;
             case "mp3":
-                value = AUDIO; break;
+                value = File_type.AUDIO.getValue(); break;
             case "pdf":
-                value = PDF; break;
+                value = File_type.PDF.getValue(); break;
+            default:
+                value = File_type.UNKNOWN.getValue(); break;
         }
         return value;
     }

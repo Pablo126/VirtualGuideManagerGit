@@ -10,14 +10,20 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
-import com.apps.jpablo.virtualguidemanager.Project;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.File_type;
+import com.apps.jpablo.virtualguidemanager.Classes.Project;
+import com.apps.jpablo.virtualguidemanager.Classes.User_type;
 import com.apps.jpablo.virtualguidemanager.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -37,6 +43,16 @@ public class New_user extends ActionBarActivity {
         setContentView(R.layout.activity_adm_new_user);
 
         dataSource = new DBContract(this);
+        //Rellenamos el spinner con los tipos de usuario
+        Spinner spinner = (Spinner) findViewById(R.id.tvUserType);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,R.layout.support_simple_spinner_dropdown_item);
+        List<User_type> Users = Arrays.asList(User_type.values());
+        List<String> combo = new ArrayList<String>();
+        for(User_type u : Users){
+            combo.add(u.getName(this.getResources()));}
+        adapter.addAll(combo);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         loadAllProjects();
     }
@@ -133,8 +149,8 @@ public class New_user extends ActionBarActivity {
         {
             EditText etUsername = (EditText) findViewById(R.id.etUsername);
             EditText etPassword = (EditText) findViewById(R.id.etUserPassword);
-            EditText etType = (EditText) findViewById(R.id.etUserType);
-            newUser(etUsername.getText().toString(),etPassword.getText().toString(),Integer.parseInt(etType.getText().toString()));
+            Spinner etType = (Spinner) findViewById(R.id.tvUserType);
+            newUser(etUsername.getText().toString(),etPassword.getText().toString(),etType.getSelectedItemPosition());
             Intent resultado = new Intent();
             setResult(RESULT_OK, resultado);
             finish();

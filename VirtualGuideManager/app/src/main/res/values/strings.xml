@@ -62,4 +62,7 @@
     <string name="title_activity_project_selected">Project</string>
     <string name="title_activity_show_file">No title</string>
 
+    <string name="Administrator">Administrator</string>
+    <string name="Other">Other</string>
+
 </resources>

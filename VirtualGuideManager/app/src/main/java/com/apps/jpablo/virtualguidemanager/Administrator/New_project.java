@@ -14,9 +14,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
-import com.apps.jpablo.virtualguidemanager.Infopoint;
-import com.apps.jpablo.virtualguidemanager.Project;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.Infopoint;
 import com.apps.jpablo.virtualguidemanager.R;
 
 import java.util.ArrayList;
@@ -47,10 +46,9 @@ public class New_project extends ActionBarActivity {
         //Obtenemos los valores de los campos
         TextView tv_name = (TextView) findViewById(R.id.etName);
         TextView tv_description = (TextView) findViewById(R.id.etDescription);
-        TextView tv_type = (TextView) findViewById(R.id.etType);
         TextView tv_background = (TextView) findViewById(R.id.etBackground);
         //Llamamos a la función de insercción en base de datos
-        if(newProject(tv_name.getText().toString(),tv_description.getText().toString(),Integer.parseInt(tv_type.getText().toString()),tv_background.getText().toString()))
+        if(newProject(tv_name.getText().toString(),tv_description.getText().toString(),tv_background.getText().toString()))
         {
             Intent resultado = new Intent();
             setResult(RESULT_OK, resultado);
@@ -149,9 +147,9 @@ public class New_project extends ActionBarActivity {
         dialogo.show(fragmentManager, "tagSeleccion");
     }
 
-    private boolean newProject(String name, String description, int type, String background_path)
+    private boolean newProject(String name, String description, String background_path)
     {
-        int id_nuevo_proyecto = dataSource.InsertProject(name,description, type, background_path);
+        int id_nuevo_proyecto = dataSource.InsertProject(name,description, background_path);
         if(id_nuevo_proyecto != -1)
         {
             int limit = 0;

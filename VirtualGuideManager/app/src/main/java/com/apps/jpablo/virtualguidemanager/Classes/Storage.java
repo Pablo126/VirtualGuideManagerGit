@@ -1,14 +1,14 @@
-package com.apps.jpablo.virtualguidemanager;
+package com.apps.jpablo.virtualguidemanager.Classes;
 
-import android.os.Environment;
+import java.io.File;
 
 /**
  * Created by JuanPablo on 16/03/2016.
  */
 public class Storage {
 
-    private String path_folder = "/storage/sdcard1/";
-    private String name_folder = "VirtualGuideContent/";
+    private String path_folder = (new File("/storage/").listFiles()[0]).toString();
+    private String name_folder = "/VirtualGuideContent/";
     private String path;
     private DBContract dataSource=null;
     public Storage()

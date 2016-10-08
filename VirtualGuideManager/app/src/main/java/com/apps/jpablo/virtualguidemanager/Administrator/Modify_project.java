@@ -1,9 +1,7 @@
 package com.apps.jpablo.virtualguidemanager.Administrator;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,9 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.apps.jpablo.virtualguidemanager.DBContract;
-import com.apps.jpablo.virtualguidemanager.Infopoint;
-import com.apps.jpablo.virtualguidemanager.Project;
+import com.apps.jpablo.virtualguidemanager.Classes.DBContract;
+import com.apps.jpablo.virtualguidemanager.Classes.Infopoint;
 import com.apps.jpablo.virtualguidemanager.R;
 
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ public class Modify_project extends ActionBarActivity {
 
     DBContract dataSource;
     int id_project;
-    TextView tv_name, tv_description, tv_type, tv_background;
+    TextView tv_name, tv_description, tv_background;
 
     Cursor c1 = null;
     String[] listInfopointsString;
@@ -54,12 +51,10 @@ public class Modify_project extends ActionBarActivity {
         {
             tv_name = (TextView) findViewById(R.id.etName);
             tv_description = (TextView) findViewById(R.id.etDescription);
-            tv_type = (TextView) findViewById(R.id.etType);
             tv_background = (TextView) findViewById(R.id.etBackground);
             tv_name.setText(c.getString(1));
             tv_description.setText(c.getString(2));
-            tv_type.setText(String.valueOf(c.getInt(3)));
-            tv_background.setText(c.getString(4));
+            tv_background.setText(c.getString(3));
         }
 
         loadAllInfopoints();
@@ -144,7 +139,7 @@ public class Modify_project extends ActionBarActivity {
 
     public void updateProject(View view)
     {
-        if(dataSource.UpdateProject(id_project,tv_name.getText().toString(),tv_description.getText().toString(),Integer.parseInt(tv_type.getText().toString()),tv_background.getText().toString()))
+        if(dataSource.UpdateProject(id_project,tv_name.getText().toString(),tv_description.getText().toString(),tv_background.getText().toString()))
         {
             //Eliminamos los proyectos anteriormente enlazados a este usuario
             String[] values = {String.valueOf(id_project)};

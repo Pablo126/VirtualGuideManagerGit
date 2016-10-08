@@ -1,4 +1,4 @@
-package com.apps.jpablo.virtualguidemanager;
+package com.apps.jpablo.virtualguidemanager.Classes;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,7 +21,6 @@ public class DBContract {
         public static final String USER_PROJ_TABLE_NAME = "User_proj";
         public static final String INFO_POINT_TABLENAME = "Infopoints";
         public static final String IP_PROJ_TABLE_NAME = "Ip_proj";
-        public static final String FILE_TYPE_TABLE_NAME = "File_type";
         public static final String STRING_TYPE = "text";
         public static final String INT_TYPE = "integer";
 
@@ -38,7 +37,6 @@ public class DBContract {
             public static final String ID = BaseColumns._ID;
             public static final String NAME = "name";
             public static final String DESCRIPTION = "description";
-            public static final String ID_TYPE = "id_type";
             public static final String BACKGROUND = "img_background";
         }
 
@@ -52,7 +50,6 @@ public class DBContract {
         public static class ColumnInfopoint{
             public static final String ID = BaseColumns._ID;
             public static final String NAME = "name";
-            public static final String ID_TYPE = "id_type";
             public static final String FILE = "file";
             public static final String QR = "qr";
         }
@@ -63,11 +60,6 @@ public class DBContract {
             public static final String ID_PROJECT = "id_project";
         }
 
-        //Campos de la tabla File_type
-        public static class columnFile_type{
-            public static final String ID = BaseColumns._ID;
-            public static final String DESCRIPTION = "description";
-        }
 
         //Script de Creación de la tabla Users
         public static final String CREATE_USERS_SCRIPT =
@@ -83,7 +75,6 @@ public class DBContract {
                         ColumnProjects.ID+" "+INT_TYPE+" primary key autoincrement," +
                         ColumnProjects.NAME+" "+STRING_TYPE+" not null," +
                         ColumnProjects.DESCRIPTION+" "+STRING_TYPE+" not null," +
-                        ColumnProjects.ID_TYPE+" "+INT_TYPE+" not null," +
                         ColumnProjects.BACKGROUND+" "+STRING_TYPE+")";
 
         //Script de Creación de la tabla User_proj
@@ -98,7 +89,6 @@ public class DBContract {
                 "create table "+INFO_POINT_TABLENAME+"(" +
                         ColumnInfopoint.ID+" "+INT_TYPE+" primary key autoincrement," +
                         ColumnInfopoint.NAME+" "+STRING_TYPE+" not null," +
-                        ColumnInfopoint.ID_TYPE+" "+INT_TYPE+"," +
                         ColumnInfopoint.FILE+" "+STRING_TYPE+"," +
                         ColumnInfopoint.QR+" "+STRING_TYPE+")";
 
@@ -109,11 +99,6 @@ public class DBContract {
                         ColumnIn_proj.ID_PROJECT+" "+INT_TYPE+" not null," +
                         "PRIMARY KEY ("+ColumnIn_proj.ID_INFOPOINT+", "+ColumnIn_proj.ID_PROJECT+"))";
 
-        //Script de Creación de la tabla File_type
-        public static final String CREATE_FILE_TYPE_SCRIPT =
-                "create table "+FILE_TYPE_TABLE_NAME+"(" +
-                        columnFile_type.ID+" "+INT_TYPE+" primary key autoincrement," +
-                        columnFile_type.DESCRIPTION+" "+STRING_TYPE+")";
 
 
         //Scripts de inserción por defecto
@@ -125,8 +110,8 @@ public class DBContract {
         //Scripts de inserción por defecto
         public static final String INSERT_PROJECTS_SCRIPT =
                 "insert into "+PROJECTS_TABLE_NAME+" values(" +
-                        "null," + "\"Proj1\"," + "\"Descripción proyecto 1\"," + "\"0\"," + "\"\")," +
-                        "(null," + "\"Proj2\"," + "\"Esta es la descripcion del proyecto 2\"," + "\"0\"," + "\"\")";
+                        "null," + "\"Proj1\"," + "\"Descripción proyecto 1\"," + "\"\")," +
+                        "(null," + "\"Proj2\"," + "\"Esta es la descripcion del proyecto 2\"," + "\"\")";
 
         //Scripts de inserción por defecto
         public static final String INSERT_USER_PROJ_SCRIPT =
@@ -138,8 +123,8 @@ public class DBContract {
         //Scripts de inserción por defecto
         public static final String INSERT_INFOPOINTS_SCRIPT =
                 "insert into "+INFO_POINT_TABLENAME+" values(" +
-                        "null," + "\"Punto1\"," + "\"0\"," + "\"NINGUNO\"," + "\"qr1\")," +
-                        "(null," + "\"Punto2\"," + "\"0\"," + "\"\"," + "\"qr2\")";
+                        "null," + "\"Punto1\"," + "\"\"," + "\"qr1\")," +
+                        "(null," + "\"Punto2\"," + "\"\"," + "\"qr2\")";
 
         //Scripts de inserción por defecto
         public static final String INSERT_IN_PROJ_SCRIPT =
@@ -162,12 +147,12 @@ public class DBContract {
             return database.rawQuery(query, selectionArgs);
         }
 
-        public int InsertProject(String name,String description, int type_proj, String background){
+        public int InsertProject(String name,String description, String background){
             try {
                 String insert = "INSERT INTO " + PROJECTS_TABLE_NAME + " ("
                         + ColumnProjects.NAME + ", "
-                        + ColumnProjects.DESCRIPTION + ", " + ColumnProjects.ID_TYPE + ", "
-                        + ColumnProjects.BACKGROUND + ") Values ('"+name+"', '"+description+"','"+type_proj+"' , '"+background+"')";
+                        + ColumnProjects.DESCRIPTION + ", "
+                        + ColumnProjects.BACKGROUND + ") Values ('"+name+"', '"+description+"', '"+background+"')";
                 database.execSQL(insert);
                 Cursor c = database.rawQuery("SELECT last_insert_rowid()",null);
                 c.moveToFirst();
@@ -184,12 +169,12 @@ public class DBContract {
             }
         }
 
-        public boolean InsertInfopoint(String name,int type,String file, String qr){
+        public boolean InsertInfopoint(String name,String file, String qr){
             try {
                 String insert = "INSERT INTO " + INFO_POINT_TABLENAME + " ("
                         + ColumnInfopoint.NAME + ", "
-                        + ColumnInfopoint.ID_TYPE + ", " + ColumnInfopoint.FILE + ", "
-                        + ColumnInfopoint.QR + ") Values ('"+name+"', '"+type+"','"+file+"' , '"+qr+"')";
+                        + ColumnInfopoint.FILE + ", "
+                        + ColumnInfopoint.QR + ") Values ('"+name+"','"+file+"' , '"+qr+"')";
                 database.execSQL(insert);
                 return true;
             }
@@ -211,13 +196,12 @@ public class DBContract {
             }
         }
 
-        public boolean UpdateProject(int id_project, String name, String description, int type, String background)
+        public boolean UpdateProject(int id_project, String name, String description, String background)
         {
             try {
                 ContentValues values = new ContentValues();
                 values.put(ColumnProjects.NAME, name);
                 values.put(ColumnProjects.DESCRIPTION, description);
-                values.put(ColumnProjects.ID_TYPE, type);
                 values.put(ColumnProjects.BACKGROUND, background);
                 String selection = ColumnProjects.ID + " = ?";
                 String[] selectionArgs = {String.valueOf(id_project)};
@@ -230,12 +214,11 @@ public class DBContract {
             }
         }
 
-    public boolean UpdateInfopoint(int id_infopoint, String name, int type, String file, String qr)
+    public boolean UpdateInfopoint(int id_infopoint, String name, String file, String qr)
     {
         try {
             ContentValues values = new ContentValues();
             values.put(ColumnInfopoint.NAME, name);
-            values.put(ColumnInfopoint.ID_TYPE, type);
             values.put(ColumnInfopoint.FILE, file);
             values.put(ColumnInfopoint.QR, qr);
             String selection = ColumnInfopoint.ID + " = ?";
